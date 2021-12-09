@@ -17,8 +17,37 @@ class App extends Component {
     filter: '',
   };
 
+  // Выполняется при Mount
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  // Выполняется после каждого обновления
+  componentDidUpdate(prevProps, prevState) {
+    const prevContacts = prevState.contacts;
+    const nextContacts = this.state.contacts;
+
+    if (nextContacts !== prevContacts) {
+      localStorage.setItem('contacts', JSON.stringify(nextContacts));
+    }
+  }
+
   // Добавляет контакт
-  addContact = newContact => {
+  addContact = data => {
+    const normalizedName = data.name.toLowerCase();
+    const uniqId = Date.now().toString();
+
+    // Создает новый контакт с ID из даты
+    const newContact = {
+      id: uniqId,
+      name: normalizedName,
+      number: data.number,
+    };
     // Проверка на дубликат
     const duplicateName = this.state.contacts.find(
       contact => contact.name === newContact.name,
@@ -48,9 +77,13 @@ class App extends Component {
 
   // Удаляет контакт
   deleteContact = id => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== id),
-    }));
+    const answer = window.confirm('Want to delete?');
+
+    if (answer) {
+      this.setState(prevState => ({
+        contacts: prevState.contacts.filter(contact => contact.id !== id),
+      }));
+    }
   };
 
   render() {

@@ -8,6 +8,7 @@ const Filter = ({ value, onChange }) => {
       <input
         type="text"
         name="filter"
+        placeholder="Find..."
         className={s.input}
         value={value}
         onChange={onChange}
