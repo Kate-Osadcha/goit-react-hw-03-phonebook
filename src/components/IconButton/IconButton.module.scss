@@ -1,4 +1,7 @@
 .IconButton {
+  border: none;
+  outline: 1px solid transparent;
+  background-color: transparent;
   cursor: pointer;
 
   & svg {
